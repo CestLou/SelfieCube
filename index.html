@@ -1,0 +1,97 @@
+<html>
+<head>
+    <title>~#selfiecube~</title>
+</head>
+<body>
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r58/three.min.js"></script>
+
+
+    <script>
+
+var camera, scene, renderer;
+var geometry, material, mesh;
+var mx = 5;
+var my = 5;
+
+
+function setup() {
+
+    //this sets up your renderer
+    var W = window.innerWidth, H = window.innerHeight;
+    renderer = new THREE.WebGLRenderer({ preserveDrawingBuffer: true });
+    renderer.autoClearColor = false;
+    renderer.setSize( W, H );
+    document.body.appendChild( renderer.domElement );
+
+    //this sets up your camera
+    camera = new THREE.PerspectiveCamera( 50, W/H, 1, 10000 );
+    camera.position.z = 500;
+
+    //this creates a scene
+    scene = new THREE.Scene();
+
+    // this is a cube
+    material = new THREE.MeshLambertMaterial({
+        map: THREE.ImageUtils.loadTexture('http://i.imgur.com/gTHkaFF.jpg')
+      });
+    geometry = new THREE.CubeGeometry(200,200,200);
+
+    mesh = new THREE.Mesh ( geometry, material );
+    scene.add( mesh );
+
+    // Makes the image appear static on the page
+    mesh = new THREE.Mesh ( geometry, material );
+    scene.add( mesh );
+
+
+     // add subtle ambient lighting
+      var ambientLight = new THREE.AmbientLight(0xbbbbbb);
+      scene.add(ambientLight);
+
+      // directional lighting
+      var directionalLight = new THREE.DirectionalLight(0xffffff);
+      directionalLight.position.set(1, 1, 1).normalize();
+      scene.add(directionalLight);
+
+
+}
+
+function draw() {
+
+    // loops draw, ie. animates
+    requestAnimationFrame( draw );
+
+    var time = Date.now() * 0.005;
+    h = ( 360 * (1.0+time) % 360 ) / 360;
+
+    mesh.material.color.setHSL( h, 0.5, 0.5 );
+
+    mesh.position.x += mx;
+
+    if( mesh.position.x > 505 || mesh.position.x < -305 ){
+        mx = -mx;
+
+    }
+
+     mesh.position.y += my;
+    if( mesh.position.y > 205 || mesh.position.y < -205 ){
+        my = -my;
+
+    }
+
+    mesh.rotation.x = Date.now() * 0.005;
+    mesh.rotation.y = Date.now() * 0.005;
+    mesh.rotation.z = Date.now() * 0.005;
+
+    // renders the new frame
+    renderer.render( scene, camera );
+}
+
+setup();
+draw();
+
+    </script>
+
+</body>
+</html>
